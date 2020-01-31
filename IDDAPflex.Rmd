@@ -31,7 +31,7 @@ sliderInput('weight', "Weight Range (kgs) ", min = 0, max = 150, value=c(30, 70)
 sliderInput('height', "Height Range (m) ", min = 0, max = 2.5, value=c(1, 2) )
 dateRangeInput('OPATad', "Admittance to the OPAT Program", start= "2008-01-01", 
                end= "2012-01-01", min = "2005-01-01", max = "2020-01-01",startview="year")
-checkboxGroupInput("resis", "Resistant Infection? (deselection will filter out the option)", choices= c("Yes", "No"), selected = c("Yes", "No"))
+checkboxGroupInput("resis", "Resistant Infection? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 checkboxGroupInput("riskofre", "High Risk of Readmission? (deselection will filter out the option)", choices= c("Yes", "No"), selected = c("Yes", "No"))
 checkboxGroupInput("MF", "Gender: (deselection will filter out the option)", choices= c("Male", "Female"), selected = c("Male", "Female"))
 checkboxGroupInput("AB", "Antibiotic Type: (deselection will filter out the option)", choices= c("Erythromycin", "Lymecycline", "Norfloxacin", "Ciprofloxacin", "Amoxicillin", 	"Gentamicin","Phenoxymethylpenicillin", "Other"), selected = c("Erythromycin", "Lymecycline", "Norfloxacin", "Ciprofloxacin", "Amoxicillin", 	"Gentamicin","Phenoxymethylpenicillin", "Other"))
@@ -50,12 +50,27 @@ Column {data-width=250}
 library(knitr)
 
 renderTable({
-  if(is.null(input$file1))
-    return()
-  newdata<-read_csv(input$file1$datapath)
+  # if(is.null(input$file1))
+  #   return()
+  newdata<-read_csv('mdata.csv')
+  # ^(input$file1$datapath) for when you want it to be the file uploaded
   assign('inputfile',newdata)
   #do things to modify the "input file" below here"
   
+  # Age input conditionals
+  
+  # Weight input conditionals
+  
+  # Height input conditionals
+  
+  # Resistant Checkbox Group conditionals
+  if("1" %in% input$resis==FALSE )
+    inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='N')
+  # if(input$resis == "1")
+  #   inputfile<- "no was deselected"
+  # if(is.null(input$resis))
+  #   inputfile <- "please select a resistance"
+
   inputfile
 })
 ```
