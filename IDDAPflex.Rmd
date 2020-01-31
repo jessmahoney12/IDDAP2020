@@ -66,11 +66,11 @@ renderTable({
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
     inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='N')
-  # if(input$resis == "1")
-  #   inputfile<- "no was deselected"
-  # if(is.null(input$resis))
-  #   inputfile <- "please select a resistance"
-
+  if("2" %in% input$resis==FALSE )
+    inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='Y')
+  if(is.null(input$resis))
+    inputfile <- "please select a resistance"
+  # needed at the very end to return the modified inputful
   inputfile
 })
 ```
