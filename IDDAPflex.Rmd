@@ -62,14 +62,7 @@ renderTable({
   # Weight input conditionals
   
   # Height input conditionals
-  if("1" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
-  if("2" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
-  if(is.null(input$riskofre))
-    inputfile <- "please mark whether the patient is at risk for readmission"
-  # needed at the very end to return the modified inputful
-  inputfile
+  
   
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
@@ -78,6 +71,16 @@ renderTable({
     inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='Y')
   if(is.null(input$resis))
     inputfile <- "please select a resistance"
+  # needed at the very end to return the modified inputful
+  inputfile
+  
+   # Risk of Readmission Checkbox group conditionals
+  if("1" %in% input$riskofre==FALSE )
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
+  if("2" %in% input$riskofre==FALSE )
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
+  if(is.null(input$riskofre))
+    inputfile <- "please mark whether the patient is at risk for readmission"
   # needed at the very end to return the modified inputful
   inputfile
 })
