@@ -26,15 +26,14 @@ Inputs {.sidebar data-width=350}
 fileInput('file1', h5('Choose a file to upload'),
             accept = c('text/csv','text/comma-separated-values',
                        'text/tab-separated-values','text/plain','.csv','.tsv'))
-sliderInput('age', "Age Range", min = 0, max = 110, value=c(30, 70) )
-sliderInput('weight', "Weight Range (kgs) ", min = 0, max = 150, value=c(30, 70) )
-sliderInput('height', "Height Range (m) ", min = 0, max = 2.5, value=c(1, 2) )
-dateRangeInput('OPATad', "Admittance to the OPAT Program", start= "2008-01-01", 
-               end= "2012-01-01", min = "2005-01-01", max = "2020-01-01",startview="year")
+sliderInput('age', "Age Range", min = 0, max = 110, value=c(0, 110) )
+sliderInput('weight', "Weight Range (kgs) ", min = 0, max = 150, value=c(0, 150))
+sliderInput('height', "Height Range (m) ", min = 0, max = 2.5, value=c(0, 2.5))
+dateRangeInput('OPATad', "Admittance to the OPAT Program", start= "2005-01-01",end= "2020-01-01", min = "2005-01-01", max ="2020-01-01", startview="year")
 checkboxGroupInput("resis", "Resistant Infection? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 checkboxGroupInput("riskofre", "High Risk of Readmission? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 checkboxGroupInput("MF", "Gender: (deselection will filter out the option)", choices= c("Male", "Female"), selected = c("Male", "Female"))
-checkboxGroupInput("AB", "Antibiotic Type: (deselection will filter out the option)", choices= c("Erythromycin", "Lymecycline", "Norfloxacin", "Ciprofloxacin", "Amoxicillin", 	"Gentamicin","Phenoxymethylpenicillin", "Other"), selected = c("Erythromycin", "Lymecycline", "Norfloxacin", "Ciprofloxacin", "Amoxicillin", 	"Gentamicin","Phenoxymethylpenicillin", "Other"))
+checkboxGroupInput("AB", "Antibiotic Type: (deselection will filter out the option)", choices= c("Erythromycin"=1, "Lymecycline"=2, "Norfloxacin"=3, "Ciprofloxacin"=4, "Amoxicillin"=5, 	"Gentamicin"=6,"Phenoxymethylpenicillin"=7, "Other"=8), selected = c(1, 2, 3, 4, 5, 6, 7, 8))
 
 ```
 
@@ -58,11 +57,17 @@ renderTable({
   #do things to modify the "input file" below here"
   
   # Age input conditionals
-  
+  inputfile<- filter(inputfile,`Age`>=as.numeric(input$age[1]))
+  inputfile<- filter(inputfile,`Age`<=as.numeric(input$age[2]))
   # Weight input conditionals
-  
-  # Height input conditionals
-  
+  inputfile<- filter(inputfile,`Weight (kgs)`>=as.numeric(input$weight[1]))
+  inputfile<- filter(inputfile,`Weight (kgs)`<=as.numeric(input$weight[2]))  
+  # # Height input conditionals
+  inputfile<- filter(inputfile,`Height (m)`>=as.numeric(input$height[1]))
+  inputfile<- filter(inputfile,`Height (m)`<=as.numeric(input$height[2]))
+  # Date input conditionals
+  # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`,"%m/%d/%y") >= format(input$OPATad[1], "%m/%d/%y"))
+  # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`, "%m/%d/%y")<= format(input$OPATad[2], "%m/%d/%y"))
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
     inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
@@ -70,7 +75,7 @@ renderTable({
     inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
-
+  
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
     inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='N')
@@ -78,6 +83,24 @@ renderTable({
     inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='Y')
   if(is.null(input$resis))
     inputfile <- "please select a resistance"
+  
+  # Antibiotic Type Checkbox Group conditionals
+  if("1" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='erythromycin')
+  if("2" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='lymecycline')
+  if("3" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='norfloxacin')
+  if("4" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='ciprofloxacin')
+  if("5" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='amoxicillin')
+  if("6" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='gentamicin')
+  if("7" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='phenoxymethylpenicillin')
+  if(is.null(input$AB))
+    inputfile <- "please select an antibiotic type"
   # needed at the very end to return the modified inputful
   inputfile
 })
