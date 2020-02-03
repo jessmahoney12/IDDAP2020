@@ -16,6 +16,7 @@ library(mgcv)
 library(shiny)
 library(dplyr)
 library(readr)
+newdata<-read_csv('mdata.csv')
 ```
 
 
@@ -46,13 +47,11 @@ Column {data-width=250}
 ### Patient Data Output {data-height=500}
 
 ```{r}
-library(knitr)
-
 renderTable({
   # if(is.null(input$file1))
-  #   return()
-  newdata<-read_csv('mdata.csv')
-  # ^(input$file1$datapath) for when you want it to be the file uploaded
+  # return()
+  # newdata<-read_csv('mdata.csv')
+  # (input$file1$datapath) for when you want it to be the file uploaded
   assign('inputfile',newdata)
   #do things to modify the "input file" below here"
   
@@ -62,17 +61,18 @@ renderTable({
   # Weight input conditionals
   inputfile<- filter(inputfile,`Weight (kgs)`>=as.numeric(input$weight[1]))
   inputfile<- filter(inputfile,`Weight (kgs)`<=as.numeric(input$weight[2]))  
-  # # Height input conditionals
+  # Height input conditionals
   inputfile<- filter(inputfile,`Height (m)`>=as.numeric(input$height[1]))
   inputfile<- filter(inputfile,`Height (m)`<=as.numeric(input$height[2]))
+  
   # Date input conditionals
-  # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`,"%m/%d/%y") >= format(input$OPATad[1], "%m/%d/%y"))
+  # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`,"%m/%d/%Y") >= format(input$OPATad[1], "%m/%d/%Y"))
   # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`, "%m/%d/%y")<= format(input$OPATad[2], "%m/%d/%y"))
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
-  if("2" %in% input$riskofre==FALSE )
     inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
+  if("2" %in% input$riskofre==FALSE)
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
   
