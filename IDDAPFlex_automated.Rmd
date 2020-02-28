@@ -1,31 +1,52 @@
 ---
-title: "Untitled"
+title: "IDDAP: Infectious Diseases Data Analysis Program"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    runtime: shiny
+    social: menu
+    theme: yeti
 ---
 
-```{r setup, include=FALSE}
+```{r global, include=FALSE}
 library(flexdashboard)
-```
-
-Column {data-width=650}
------------------------------------------------------------------------
-
-### Chart A
-
-```{r}
+library(ggplot2)
+library(mgcv)
+library(shiny)
+library(dplyr)
+library(readr)
+#newdata<-read_csv('mdata.csv')
 
 ```
 
-Column {data-width=350}
+Inputs {.sidebar data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+```{r}
+fileInput('file1', h5('Choose a file to upload'),
+            accept = c('text/csv','text/comma-separated-values',
+                       'text/tab-separated-values','text/plain','.csv','.tsv'))
 
+```
+
+Column {data-width=250}
+-----------------------------------------------------------------------
+### Sorting Criteria {data-height=100}
 ```{r}
 
+```
+### Patient Data Output {data-height=500}
+
+```{r}
+renderTable({
+  if(is.null(input$file1))
+  return()
+  newdata<-read_csv('mdata.csv')
+  (input$file1$datapath) #for when you want it to be the file uploaded
+  assign('inputfile',newdata)
+  #do things to modify the "input file" below here"
+})
 ```
 
 ### Chart C
