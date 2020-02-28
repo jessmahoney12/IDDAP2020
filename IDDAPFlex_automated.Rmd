@@ -42,8 +42,7 @@ Column {data-width=250}
 renderTable({
   if(is.null(input$file1))
   return()
-  newdata<-read_csv('mdata.csv')
-  (input$file1$datapath) #for when you want it to be the file uploaded
+  newdata<-read_csv(input$file1$datapath)
   assign('inputfile',newdata)
   #do things to modify the "input file" below here"
 })
