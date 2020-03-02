@@ -34,10 +34,12 @@ fileInput('file1', h5('Choose a file to upload'),
 -----------------------------------------------------------------------
 ### Sorting Criteria {data-height=700}
 ```{r}
+renderValueBox({
+datafile <- eventReactive(input$file1,read.csv(input$file1$datapath))
+headers = colnames(input$file1)
 
-sliderInput('age', "Age Range", min = 0, max = 110, value=c(0, 110) )
-
-
+sliderInput('label1', headers[1], min = 0, max = 110, value=c(0, 110) )
+})
 ```
 
 Column {data-width=250}
