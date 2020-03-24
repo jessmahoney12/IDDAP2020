@@ -39,6 +39,7 @@ datafile <- eventReactive(input$file1,read.csv(input$file1$datapath))
 headers = colnames(input$file1)
 
 sliderInput('label1', headers[1], min = 0, max = 110, value=c(0, 110) )
+checkboxGroupInput('check', "High Risk of Readmission? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 })
 ```
 
