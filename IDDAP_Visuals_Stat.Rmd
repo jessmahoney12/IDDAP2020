@@ -1,0 +1,106 @@
+---
+title: "IDDAP Visuals and Stats"
+author: "Elnaz Ghajar-Rahimi (eg8cm)"
+date: "3/23/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Loading libraries + mock sheet (pf for short)
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(RColorBrewer)
+
+pf=read.csv("C://Users//student//Documents//R//Capstone//IDDAP2020//mdata.csv",stringsAsFactors=FALSE)
+
+```
+
+Data visualizations
+
+Antibiotic counts
+```{r}
+
+#Bar Graph
+ggplot(pf,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set1"))+ylab("Numer of Patients Taking Antibiotic")
+#NOTE: the first argument in brewer.pal is the number of categories (ex the numer of antibiotic types)
+
+#Tabulate
+table(pf$Antibiotic)
+```
+
+
+Age, weight, and risk of readmission
+
+Percent bar graph: antibiotic and resistant organism
+```{r}
+ggplot(pf,aes(x=Antibiotic,fill=Resistant.Organism..Y.N.))+geom_bar(position="fill")+labs(x="Antibiotic",y="Number of Patients")+theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
+```
+
+### Statistics
+
+Average height and age of patient taking each antibiotic
+```{r}
+aggregate(pf[,c(3,4)], list(pf$Antibiotic),mean,na.rm=T)
+```
+
+### Extra Stuff
+Making Risk of readmisison binary (Y=1, N=0)
+```{r}
+risk=NULL
+
+for (i in 1:nrow(pf))
+{
+  if (pf[i,9]=="N") {risk[i]=0}
+  else {risk[i]=1}
+}
+
+
+#This just adds it to a new column so that I could check if the counts were correct
+revised_pf=data.frame(pf,risk)
+#View(revised_pf)
+
+#if ("High.Risk.of.Readmission"=="Y") {}
+ggplot(pf,aes(x=Age,y=risk))+geom_point()
+```
+
+
+
+**Accounting for all spellings of Yes/No **
+
+* pf_new was created to prevent overriding of original file
+* Risk is the corrected version of "High Risk of Readmission"
+* Resistance is the corrected version of Resistant Organism
+
+```{r}
+#Correct resistance
+pf_new=pf
+pf_new=pf_new%>%
+mutate(Resistance=ifelse(grepl(paste(c("Y","YES","YEs","Yes","y","yE","yES","yes"),collapse="|"),Resistant.Organism..Y.N.),"Y",
+ifelse(grepl(paste(c("N","NO","No","nO","no"),collapse="|"),Resistant.Organism..Y.N.),"N","Unrecognized Input"
+)))
+
+#Correct risk of readmission
+pf_new=pf_new%>%
+mutate(Risk=ifelse(grepl(paste(c("Y","YES","YEs","Yes","y","yE","yES","yes"),collapse="|"),High.Risk.of.Readmission),"Y",
+ifelse(grepl(paste(c("N","NO","No","nO","no"),collapse="|"),High.Risk.of.Readmission),"N","Unrecognized Input"
+)))
+
+
+```
+
+```{r}
+#Correct gender spellings
+pf_new=pf_new%>%
+mutate(Sex=ifelse(grepl(paste(c("F","f"),collapse="|"),Gender..M.F.),"F",
+ifelse(grepl(paste(c("M","m"),collapse="|"),Gender..M.F.),"M","Unrecognized Input"
+)))
+
+#View to check. It works!
+View(pf_new)
+```
+
