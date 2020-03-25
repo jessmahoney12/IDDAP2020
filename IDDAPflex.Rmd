@@ -7,7 +7,6 @@ output:
     runtime: shiny
     social: menu
     theme: yeti
-#hello this is my comment by Mike
 ---
 ```{r global, include=FALSE}
 library(flexdashboard)
@@ -16,7 +15,7 @@ library(mgcv)
 library(shiny)
 library(dplyr)
 library(readr)
-newdata<-read_csv('mdata.csv')
+#newdata<-read_csv('mdata.csv')
 ```
 
 
@@ -27,6 +26,7 @@ Inputs {.sidebar data-width=350}
 fileInput('file1', h5('Choose a file to upload'),
             accept = c('text/csv','text/comma-separated-values',
                        'text/tab-separated-values','text/plain','.csv','.tsv'))
+
 sliderInput('age', "Age Range", min = 0, max = 110, value=c(0, 110) )
 sliderInput('weight', "Weight Range (kgs) ", min = 0, max = 150, value=c(0, 150))
 sliderInput('height', "Height Range (m) ", min = 0, max = 2.5, value=c(0, 2.5))
@@ -40,18 +40,26 @@ checkboxGroupInput("AB", "Antibiotic Type: (deselection will filter out the opti
 
 Column {data-width=250}
 -----------------------------------------------------------------------
-### Sorting Criteria {data-height=100}
-```{r}
-
-```
-### Patient Data Output {data-height=500}
-
+### Sorting Criteria {data-height=200}
 ```{r}
 renderTable({
-  # if(is.null(input$file1))
-  # return()
-  # newdata<-read_csv('mdata.csv')
-  # (input$file1$datapath) for when you want it to be the file uploaded
+  if(is.null(input$file1))
+  return()
+  newdata<-read_csv(input$file1$datapath)
+  headers= colnames(newdata)} 
+  
+  sliderInput('age', "Age Ran
+            ge", min = 0, max = 110, value=c(0, 110) )
+})
+```
+
+### Patient Data Output {data-height=500}
+```{r}
+renderTable({
+  if(is.null(input$file1))
+  return()
+  newdata<-read_csv(input$file1$datapath)
+  # () for when you want it to be the file uploaded
   assign('inputfile',newdata)
   #do things to modify the "input file" below here"
   
