@@ -1,36 +1,37 @@
 ---
 title: "IDDAP: Infectious Diseases Data Analysis Program"
+author: "UVA BME Capstone 2020"
 output: 
   flexdashboard::flex_dashboard:
+    source: embed
     orientation: columns
     vertical_layout: fill
     runtime: shiny
     social: menu
-    theme: yeti
+    theme: cerulean
 ---
-```{r global, include=FALSE}
+
+```{r setup, include=FALSE}
 library(flexdashboard)
 library(ggplot2)
 library(mgcv)
 library(shiny)
 library(dplyr)
 library(readr)
-#newdata<-read_csv('mdata.csv')
+library(RColorBrewer)
+# make all chunk settings global  knitr::opts_chunk$set(put setting here)
+
 ```
 
-
-Inputs {.sidebar data-width=350}
------------------------------------------------------------------------
-
+Sidebar {.sidebar data-width=250}
+=======================================================================
 ```{r}
-fileInput('file1', h5('Choose a file to upload'),
-            accept = c('text/csv','text/comma-separated-values',
-                       'text/tab-separated-values','text/plain','.csv','.tsv'))
-
+fileInput('file1', h5("Please Select a file to Upload"),accept=c('text/csv','text/comma-separated-values','text/tab-separated-values','text/plain','.csv','.tsv'))
+h4("Filtering Criteria:")
 sliderInput('age', "Age Range", min = 0, max = 110, value=c(0, 110) )
 sliderInput('weight', "Weight Range (kgs) ", min = 0, max = 150, value=c(0, 150))
 sliderInput('height', "Height Range (m) ", min = 0, max = 2.5, value=c(0, 2.5))
-dateRangeInput('OPATad', "Admittance to the OPAT Program", start= "2005-01-01",end= "2020-01-01", min = "2005-01-01", max ="2020-01-01", startview="year")
+dateRangeInput('OPATad', "Admittance to the OPAT Program", start= "2005-01-01",end= "2020-01-01", min = "2005-01-01", max ="2020-01-01", separator = " - ", format = "yyyy/mm/dd", startview="year")
 checkboxGroupInput("resis", "Resistant Infection? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 checkboxGroupInput("riskofre", "High Risk of Readmission? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 checkboxGroupInput("MF", "Gender: (deselection will filter out the option)", choices= c("Male", "Female"), selected = c("Male", "Female"))
@@ -38,28 +39,24 @@ checkboxGroupInput("AB", "Antibiotic Type: (deselection will filter out the opti
 
 ```
 
-Column {data-width=250}
------------------------------------------------------------------------
-### Sorting Criteria {data-height=200}
+IDDAP
+===================================== 
+
+Column {.tabset .tabset-fade}
+-------------------------------------
+### Sorting Preferences
 ```{r}
-renderTable({
-  if(is.null(input$file1))
-  return()
-  newdata<-read_csv(input$file1$datapath)
-  headers= colnames(newdata)} 
-  
-  sliderInput('age', "Age Ran
-            ge", min = 0, max = 110, value=c(0, 110) )
-})
+renderPrint({
+headers = colnames(input$file1)
+  })
 ```
 
-### Patient Data Output {data-height=500}
+### Patient Data Output 
 ```{r}
 renderTable({
   if(is.null(input$file1))
   return()
   newdata<-read_csv(input$file1$datapath)
-  # () for when you want it to be the file uploaded
   assign('inputfile',newdata)
   #do things to modify the "input file" below here"
   
@@ -74,8 +71,9 @@ renderTable({
   inputfile<- filter(inputfile,`Height (m)`<=as.numeric(input$height[2]))
   
   # Date input conditionals
-  # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`,"%m/%d/%Y") >= format(input$OPATad[1], "%m/%d/%Y"))
-  # inputfile<- filter(inputfile, as.Date.character(`OPAT Start Date`, "%m/%d/%y")<= format(input$OPATad[2], "%m/%d/%y"))
+inputfile<- filter(inputfile, (as.integer(input$OPATad[1]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) < 0)
+inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) > 0)
+  
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
     inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
@@ -112,11 +110,21 @@ renderTable({
   # needed at the very end to return the modified inputful
   inputfile
 })
+
 ```
 
-### Data Analytics  {data-height=200}
-
+### Automated Corrections
 ```{r}
-
+renderPrint({
+  "hi"
+  })
 ```
+
+### Data Analytics 
+```{r}
+renderPlot({
+ggplot(inputfile,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set1"))+ylab("Numer of Patients Taking Antibiotic")
+})
+```
+
 
