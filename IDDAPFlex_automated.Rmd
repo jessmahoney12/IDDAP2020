@@ -6,6 +6,7 @@ output:
     vertical_layout: fill
     runtime: shiny
     social: menu
+    
     theme: yeti
 ---
 
@@ -28,19 +29,18 @@ fileInput('file1', h5('Choose a file to upload'),
             accept = c('text/csv','text/comma-separated-values',
                        'text/tab-separated-values','text/plain','.csv','.tsv'))
 
+actionButton("ClearFile","Clear file")
+
+
 
 ```
 
 -----------------------------------------------------------------------
 ### Sorting Criteria {data-height=700}
 ```{r}
-renderValueBox({
-datafile <- eventReactive(input$file1,read.csv(input$file1$datapath))
-headers = colnames(input$file1)
 
-sliderInput('label1', headers[1], min = 0, max = 110, value=c(0, 110) )
-checkboxGroupInput('check', "High Risk of Readmission? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
-})
+
+
 ```
 
 Column {data-width=250}
@@ -60,6 +60,9 @@ renderTable({
   newdata<-read_csv(input$file1$datapath)
   assign('inputfile',newdata)
   #do things to modify the "input file" below here"
+  
+  
+  
   
 })
 
