@@ -123,6 +123,59 @@ renderPrint({
 ### Data Analytics 
 ```{r}
 renderPlot({
+  if(is.null(input$file1))
+  return()
+  newdata<-read_csv(input$file1$datapath)
+  assign('inputfile',newdata)
+  #do things to modify the "input file" below here"
+  
+  # Age input conditionals
+  inputfile<- filter(inputfile,`Age`>=as.numeric(input$age[1]))
+  inputfile<- filter(inputfile,`Age`<=as.numeric(input$age[2]))
+  # Weight input conditionals
+  inputfile<- filter(inputfile,`Weight (kgs)`>=as.numeric(input$weight[1]))
+  inputfile<- filter(inputfile,`Weight (kgs)`<=as.numeric(input$weight[2]))  
+  # Height input conditionals
+  inputfile<- filter(inputfile,`Height (m)`>=as.numeric(input$height[1]))
+  inputfile<- filter(inputfile,`Height (m)`<=as.numeric(input$height[2]))
+  
+  # Date input conditionals
+inputfile<- filter(inputfile, (as.integer(input$OPATad[1]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) < 0)
+inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) > 0)
+  
+  # Risk of readmission checkbox group
+  if("1" %in% input$riskofre==FALSE )
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
+  if("2" %in% input$riskofre==FALSE)
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
+  if(is.null(input$riskofre))
+    inputfile <- "please mark whether the patient is at risk for readmission"
+  
+  # Resistant Checkbox Group conditionals
+  if("1" %in% input$resis==FALSE )
+    inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='N')
+  if("2" %in% input$resis==FALSE )
+    inputfile<- filter(inputfile,`Resistant Organism (Y/N)`=='Y')
+  if(is.null(input$resis))
+    inputfile <- "please select a resistance"
+  
+  # Antibiotic Type Checkbox Group conditionals
+  if("1" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='erythromycin')
+  if("2" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='lymecycline')
+  if("3" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='norfloxacin')
+  if("4" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='ciprofloxacin')
+  if("5" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='amoxicillin')
+  if("6" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='gentamicin')
+  if("7" %in% input$AB==FALSE )
+    inputfile<- filter(inputfile,`Antibiotic`!='phenoxymethylpenicillin')
+  if(is.null(input$AB))
+    inputfile <- "please select an antibiotic type"
 ggplot(inputfile,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set1"))+ylab("Numer of Patients Taking Antibiotic")
 })
 ```
