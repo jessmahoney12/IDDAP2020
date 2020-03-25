@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "IDDAP: Infectious Diseases Data Analysis Program"
 output: 
@@ -83,3 +84,82 @@ ggplot(pf,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set1"))+ylab("Numer of 
 })
 ```
 
+=======
+---
+title: "IDDAP: Infectious Diseases Data Analysis Program"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    runtime: shiny
+    social: menu
+    
+    theme: yeti
+---
+
+```{r global, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(mgcv)
+library(shiny)
+library(dplyr)
+library(readr)
+#newdata<-read_csv('mdata.csv')
+
+```
+
+Inputs {.sidebar data-width=350}
+-----------------------------------------------------------------------
+### File Upload {data-height=100}
+```{r}
+fileInput('file1', h5('Choose a file to upload'),
+            accept = c('text/csv','text/comma-separated-values',
+                       'text/tab-separated-values','text/plain','.csv','.tsv'))
+
+actionButton("ClearFile","Clear file")
+
+
+
+```
+
+-----------------------------------------------------------------------
+### Sorting Criteria {data-height=700}
+```{r}
+
+
+
+```
+
+Column {data-width=250}
+-----------------------------------------------------------------------
+### Sorting Criteria {data-height=100}
+```{r}
+
+
+
+```
+### Patient Data Output {data-height=500}
+
+```{r}
+renderTable({
+  if(is.null(input$file1))
+    return()
+  newdata<-read_csv(input$file1$datapath)
+  assign('inputfile',newdata)
+  #do things to modify the "input file" below here"
+  
+  
+  
+  
+})
+
+
+```
+
+### Data Analytics  {data-height=200}
+
+```{r}
+
+```
+
+>>>>>>> master
