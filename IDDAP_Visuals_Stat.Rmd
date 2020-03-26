@@ -16,7 +16,7 @@ library(ggplot2)
 library(tidyr)
 library(RColorBrewer)
 
-pf=read.csv("C://Users//student//Documents//R//Capstone//IDDAP2020//mdata.csv",stringsAsFactors=FALSE)
+pf=read.csv("/Users/jessmahoney/Desktop/capstoneR/IDDAP2020/mdata.csv",stringsAsFactors=FALSE)
 
 ```
 
