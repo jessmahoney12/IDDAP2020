@@ -10,7 +10,7 @@ output:
     theme: cerulean
 ---
 
-```{r setup, include=FALSE}
+```{r setup}
 library(flexdashboard)
 library(ggplot2)
 library(mgcv)
@@ -18,8 +18,7 @@ library(shiny)
 library(dplyr)
 library(readr)
 library(RColorBrewer)
-# make all chunk settings global  knitr::opts_chunk$set(put setting here)
-
+library(DT)
 ```
 
 Sidebar {.sidebar data-width=250} 
@@ -40,38 +39,16 @@ checkboxGroupInput("AB", "Antibiotic Type: (deselection will filter out the opti
 File Manipulation
 ===================================== 
 
-First Row {.tabset .tabset-fade data-height=100}
--------------------------------------
-
-### Search
-```{r}
-textInput("search", "Search for:")
-
-```
-
-### Sort
-```{r}
-
-
-```
-
-### Display Options
-```{r}
-renderPrint({
-"here"
-  })
-```
-
 Output Column {.tabset .tabset-fade}
 -------------------------------------
 ### Patient Data Results
 ```{r}
-renderTable({
+renderDataTable({
   if(is.null(input$file1))
   return()
   newdata<-read_csv(input$file1$datapath)
   assign('inputfile',newdata)
-
+  
   # Age input conditionals
   inputfile<- filter(inputfile,`Age`>=as.numeric(input$age[1]))
   inputfile<- filter(inputfile,`Age`<=as.numeric(input$age[2]))
@@ -90,7 +67,7 @@ renderTable({
   if("1" %in% input$riskofre==FALSE )
     inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
   if("2" %in% input$riskofre==FALSE)
-    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
+    inputfile<- filter(inputfile,`High Risk of Readmission` %in% c('N','No', 'NO'))
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
   
@@ -134,13 +111,6 @@ renderTable({
   assign('original',newdata)
   original
 })
-```
-
-### View Automated Corrections
-```{r}
-renderPrint({
-  "hi"
-  })
 ```
 
 Data Analytics
