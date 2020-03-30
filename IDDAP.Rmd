@@ -244,7 +244,7 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
     inputfile <- "please select an antibiotic type"
 
 #says that Resistant.Organism..Y.N. does not exist- i cant figure it out
-ggplot(inputfile,aes(x=Antibiotic,fill=Resistant.Organism..Y.N.))+geom_bar(position="fill")+labs(x="Antibiotic",y="Number of Patients")+theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
+ggplot(inputfile,aes(x=Antibiotic,fill=Resistant.Organism..Y.N.))+geom_bar(position="fill")+labs(x="Antibiotic",y="Number of Patients") +theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
 })
 ```
 
