@@ -1,4 +1,4 @@
-MRN (#######),Gender (M/F),Age,Height (m),Weight (kgs),OPAT Start Date,Antibiotic,Resistant Organism (Y/N),High Risk of Readmission
+MRN (#######),Gender (M/F),Age,Height (m),Weight (kgs),OPAT Start Date,Antibiotic,Resistant Organism Y/N,High Risk of Readmission
 9195727,M,93,1.75,66.1,09/01/2018,phenoxymethylpenicillin,Y,Y
 9298555,M,62,1.7,60.3,09/01/2018,ciprofloxacin,Y,Y
 1133907,F,77,1.37,34.9,09/15/2018,erythromycin,Y,N
