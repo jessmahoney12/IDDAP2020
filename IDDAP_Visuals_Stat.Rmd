@@ -16,7 +16,7 @@ library(ggplot2)
 library(tidyr)
 library(RColorBrewer)
 
-pf=read.csv("/Users/jessmahoney/Desktop/capstoneR/IDDAP2020/mdata.csv",stringsAsFactors=FALSE, check.names = FALSE)
+pf=read.csv("/Users/jessmahoney/Desktop/capstoneR/IDDAP2020/mdata.csv",stringsAsFactors=FALSE)
 
 ```
 
@@ -38,7 +38,7 @@ Age, weight, and risk of readmission
 
 Percent bar graph: antibiotic and resistant organism
 ```{r}
-ggplot(pf,aes(x=Antibiotic,fill=Resistant.Organism..Y.N.))+geom_bar(position="fill")+labs(x="Antibiotic",y="Number of Patients")+theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
+ggplot(pf,aes(x=Antibiotic,fill=Resistant.Organism.Y.N))+geom_bar(position="fill")+labs(x="Antibiotic",y="Number of Patients")+theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
 ```
 
 ### Statistics
