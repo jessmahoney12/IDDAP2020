@@ -16,7 +16,7 @@ library(ggplot2)
 library(tidyr)
 library(RColorBrewer)
 
-pf=read.csv("/Users/jessmahoney/Desktop/capstoneR/IDDAP2020/mdata.csv",stringsAsFactors=FALSE)
+pf=read.csv("https://raw.githubusercontent.com/jessmahoney12/dataforIDDAP/master/PatientData.csv",stringsAsFactors=FALSE)
 
 ```
 
@@ -26,7 +26,7 @@ Antibiotic counts
 ```{r}
 
 #Bar Graph
-ggplot(pf,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set1"))+ylab("Numer of Patients Taking Antibiotic")
+ggplot(pf,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(6,"Set1"))+ylab("Number of Patients Taking Antibiotic")
 #NOTE: the first argument in brewer.pal is the number of categories (ex the numer of antibiotic types)
 
 #Tabulate
@@ -80,8 +80,8 @@ ggplot(pf,aes(x=Age,y=risk))+geom_point()
 #Correct resistance
 pf_new=pf
 pf_new=pf_new%>%
-mutate(Resistance=ifelse(grepl(paste(c("Y","YES","YEs","Yes","y","yE","yES","yes"),collapse="|"),Resistant.Organism..Y.N.),"Y",
-ifelse(grepl(paste(c("N","NO","No","nO","no"),collapse="|"),Resistant.Organism..Y.N.),"N","Unrecognized Input"
+  mutate(Resistance=ifelse(grepl(paste(c("Y","YES","YEs","Yes","y","yE","yES","yes"),collapse="|"),Resistant.Organism..Y.N.),"Y",
+ifelse(grepl(paste(c("N","NO","No","nO","no"),collapse="|"),Resistant.Organism.Y.N),"N","Unrecognized Input"
 )))
 
 #Correct risk of readmission
@@ -95,8 +95,9 @@ ifelse(grepl(paste(c("N","NO","No","nO","no"),collapse="|"),High.Risk.of.Readmis
 
 ```{r}
 #Correct gender spellings
+pf_new=pf
 pf_new=pf_new%>%
-mutate(Sex=ifelse(grepl(paste(c("F","f"),collapse="|"),Gender..M.F.),"F",
+mutate(Gender..M.F.=ifelse(grepl(paste(c("F","f"),collapse="|"),Gender..M.F.),"F",
 ifelse(grepl(paste(c("M","m"),collapse="|"),Gender..M.F.),"M","Unrecognized Input"
 )))
 
@@ -104,3 +105,22 @@ ifelse(grepl(paste(c("M","m"),collapse="|"),Gender..M.F.),"M","Unrecognized Inpu
 View(pf_new)
 ```
 
+```{r}
+
+for (i in 1:nrow(pf))
+{ 
+  for (j in 1:ncol(pf))
+  {
+  if (pf[i,j]==c("n", "NO","No","nO","no")) 
+  { pf[i,j]= "N"}
+  if (pf[i,j]==c("YES","YEs","Yes","y","yE","yES","yes")) 
+  { pf[i,j]= "Y"}
+  if (pf[i,j]==c("m","male","MALE","Male")) 
+  { pf[i,j]= "M"}
+    if (pf[i,j]==c("f","female","FEMALE","Female")) 
+  { pf[i,j]= "F"}
+  }
+}
+
+
+```

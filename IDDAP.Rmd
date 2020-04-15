@@ -10,18 +10,18 @@ output:
     theme: cerulean
 ---
 
-```{r, context="setup"}
+```{r}
 library(flexdashboard)
 library(ggplot2)
 library(mgcv)
 library(shiny)
 library(dplyr)
-library(readr)
+library(readr)  
 library(RColorBrewer)
 library(DT)
-newdata=read.csv("https://raw.githubusercontent.com/jessmahoney12/dataforIDDAP/master/mdata.csv",stringsAsFactors=FALSE, check.names = FALSE)
+newdata=read.csv("https://raw.githubusercontent.com/jessmahoney12/dataforIDDAP/master/PatientData.csv",stringsAsFactors=FALSE, check.names = FALSE)
 
-plotdata=read.csv("https://raw.githubusercontent.com/jessmahoney12/dataforIDDAP/master/mdata.csv",stringsAsFactors= FALSE, check.names = TRUE)
+plotdata=read.csv("https://raw.githubusercontent.com/jessmahoney12/dataforIDDAP/master/PatientData.csv",stringsAsFactors= FALSE, check.names = TRUE)
 
 ```
 
@@ -54,39 +54,39 @@ renderDataTable({
   inputfile<- filter(inputfile,`Age`<=as.numeric(input$age[2]))
   # Weight input conditionals
   inputfile<- filter(inputfile,`Weight (kgs)`>=as.numeric(input$weight[1]))
-  inputfile<- filter(inputfile,`Weight (kgs)`<=as.numeric(input$weight[2]))  
+  inputfile<- filter(inputfile,`Weight (kgs)`<=as.numeric(input$weight[2]))
   # Height input conditionals
   inputfile<- filter(inputfile,`Height (m)`>=as.numeric(input$height[1]))
   inputfile<- filter(inputfile,`Height (m)`<=as.numeric(input$height[2]))
-  
+
   # Date input conditionals
 inputfile<- filter(inputfile, (as.integer(input$OPATad[1]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) < 0)
 inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) > 0)
-  
+
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High Risk of Readmission`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='Y')
   if("2" %in% input$riskofre==FALSE)
-    inputfile<- filter(inputfile,`High Risk of Readmission`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`High Risk of Readmission`=='N')
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
-  
+
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant Organism Y/N`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`Resistant Organism Y/N`=='Y')
   if("2" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant Organism Y/N`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`Resistant Organism Y/N`=='N')
   if(is.null(input$resis))
     inputfile <- "please select a resistance"
 
   # Gender Checkbox Group conditionals
   if("Male" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender (M/F)`==c("F","f"))
+    inputfile<- filter(inputfile,`Gender (M/F)`=='F')
   if("Female" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender (M/F)`==c("M","m"))
+    inputfile<- filter(inputfile,`Gender (M/F)`=='M')
   if(is.null(input$resis))
     inputfile <- "please select a gender"
-  
+
   # Antibiotic Type Checkbox Group conditionals
   if("1" %in% input$AB==FALSE )
     inputfile<- filter(inputfile,`Antibiotic`!='erythromycin')
@@ -104,6 +104,7 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
     inputfile<- filter(inputfile,`Antibiotic`!='phenoxymethylpenicillin')
   if(is.null(input$AB))
     inputfile <- "please select an antibiotic type"
+
   inputfile <- datatable(inputfile, extensions= c("Scroller", "FixedColumns", "Buttons", 'ColReorder'),options = list(scrollY=375, scrollX=600, scroller=TRUE, fixedColumns = list(leftColumns = 1), dom = 'Bfrtip', buttons = c('colvis', 'csv', 'excel'), colReorder = TRUE)) %>% formatStyle(names(inputfile), fontSize='12px')
   inputfile
 })
@@ -147,29 +148,30 @@ renderPlot({
   
   # Date input conditionals
 inputfile<- filter(inputfile, (as.integer(input$OPATad[1]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) < 0)
-inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) > 0)
+inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPAT Start Date`,"%m/%d/%Y"))) > 0) 
   
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High Risk of Readmission`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`High Risk of Readmission`=="Y")
   if("2" %in% input$riskofre==FALSE)
-    inputfile<- filter(inputfile,`High Risk of Readmission`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`High Risk of Readmission`=="N")
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
-  
+
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant Organism Y/N`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`Resistant Organism Y/N`=="Y")
   if("2" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant Organism Y/N`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`Resistant Organism Y/N`=="N")
   if(is.null(input$resis))
     inputfile <- "please select a resistance"
 
+
   # Gender Checkbox Group conditionals
   if("Male" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender (M/F)`==c("F","f"))
+    inputfile<- filter(inputfile,`Gender (M/F)`=="F")
   if("Female" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender (M/F)`==c("M","m"))
+    inputfile<- filter(inputfile,`Gender (M/F)`=="M")
   if(is.null(input$resis))
     inputfile <- "please select a gender"
   
@@ -190,7 +192,8 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
     inputfile<- filter(inputfile,`Antibiotic`!='phenoxymethylpenicillin')
   if(is.null(input$AB))
     inputfile <- "please select an antibiotic type"
-ggplot(inputfile,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set2"))+ylab("Number of Patients Taking Antibiotic")
+
+ggplot(inputfile,aes(x=Antibiotic))+geom_bar(fill=brewer.pal(7,"Set3"))+ylab("Number of Patients Taking Antibiotic")
 })
 ```
 
@@ -215,25 +218,26 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
   
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High.Risk.of.Readmission`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`High.Risk.of.Readmission`=="Y")
   if("2" %in% input$riskofre==FALSE)
-    inputfile<- filter(inputfile,`High.Risk.of.Readmission`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`High.Risk.of.Readmission`=="N")
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
   
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`=="Y")
   if("2" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`=="N")
   if(is.null(input$resis))
     inputfile <- "please select a resistance"
+
    
  # Gender Checkbox Group conditionals
   if("Male" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender..M.F.`==c("F","f"))
+    inputfile<- filter(inputfile,`Gender..M.F.`=="F")
   if("Female" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender..M.F.`==c("M","m"))
+    inputfile<- filter(inputfile,`Gender..M.F.`=="M")
   if(is.null(input$resis))
     inputfile <- "please select a gender"
 
@@ -281,25 +285,25 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
   
   # Risk of readmission checkbox group
   if("1" %in% input$riskofre==FALSE )
-    inputfile<- filter(inputfile,`High.Risk.of.Readmission`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`High.Risk.of.Readmission`=="Y")
   if("2" %in% input$riskofre==FALSE)
-    inputfile<- filter(inputfile,`High.Risk.of.Readmission`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`High.Risk.of.Readmission`=="N")
   if(is.null(input$riskofre))
     inputfile <- "please mark whether the patient is at risk for readmission"
   
   # Resistant Checkbox Group conditionals
   if("1" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`==c("Y","YES","YEs","Yes","y","yE","yES","yes"))
+    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`=="Y")
   if("2" %in% input$resis==FALSE )
-    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`==c("N","NO","No","nO","no"))
+    inputfile<- filter(inputfile,`Resistant.Organism.Y.N`=="N")
   if(is.null(input$resis))
     inputfile <- "please select a resistance"
 
     # Gender Checkbox Group conditionals
   if("Male" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender..M.F.`==c("F","f"))
+    inputfile<- filter(inputfile,`Gender..M.F.`=="F")
   if("Female" %in% input$MF==FALSE )
-    inputfile<- filter(inputfile,`Gender..M.F.`==c("M","m"))
+    inputfile<- filter(inputfile,`Gender..M.F.`=="M")
   if(is.null(input$resis))
   
   # Antibiotic Type Checkbox Group conditionals
