@@ -11,7 +11,7 @@ output:
 ---
 
 ```{r}
-library(flexdashboard)
+library(flexdashboard) 
 library(ggplot2)
 library(mgcv)
 library(shiny)
@@ -108,7 +108,7 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
   inputfile <- datatable(inputfile, extensions= c("Scroller", "FixedColumns", "Buttons", 'ColReorder'),options = list(scrollY=375, scrollX=600, scroller=TRUE, fixedColumns = list(leftColumns = 1), dom = 'Bfrtip', buttons = c('colvis', 'csv', 'excel'), colReorder = TRUE)) %>% formatStyle(names(inputfile), fontSize='12px')
   inputfile
 })
-
+ 
 ```
 
 ### Original File

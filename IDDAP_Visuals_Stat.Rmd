@@ -122,5 +122,19 @@ for (i in 1:nrow(pf))
   }
 }
 
+for (i in 1:nrow(newdata))
+{ 
+  for (j in 1:ncol(newdata))
+  {
+  if (newdata[i,j]==c("n", "NO","No","nO","no")) 
+  { newdata[i,j]= "N"}
+  if (newdata[i,j]==c("YES","YEs","Yes","y","yE","yES","yes")) 
+  { newdata[i,j]= "Y"}
+  if (newdata[i,j]==c("m","male","MALE","Male")) 
+  { newdata[i,j]= "M"}
+    if (newdata[i,j]==c("f","female","FEMALE","Female")) 
+  { newdata[i,j]= "F"}
+  }
+}
 
 ```
