@@ -30,9 +30,9 @@ Sidebar {.sidebar data-width=250}
 ```{r}
 fileInput('file1', h5("Please Select a file to Upload"),accept=c('text/csv','text/comma-separated-values','text/tab-separated-values','text/plain','.csv','.tsv'))
 h2("Filters:")
-sliderInput('age', "Age Range", min = 0, max = 110, value=c(0, 110) )
-sliderInput('weight', "Weight Range (kgs) ", min = 0, max = 150, value=c(0, 150))
-sliderInput('height', "Height Range (m) ", min = 0, max = 2.5, value=c(0, 2.5))
+sliderInput('age', "Age Range", min = 20, max = 100, value=c(20, 100) )
+sliderInput('weight', "Weight Range (kgs) ", min = 30, max = 100, value=c(30, 100))
+sliderInput('height', "Height Range (m) ", min = 1.25, max = 2, value=c(1.25, 2))
 dateRangeInput('OPATad', "Admittance to the OPAT Program", start= "2005-01-01",end= "2020-01-01", min = "2005-01-01", max ="2020-01-01", separator = " - ", format = "yyyy/mm/dd", startview="year")
 checkboxGroupInput("resis", "Resistant Infection? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
 checkboxGroupInput("riskofre", "High Risk of Readmission? (deselection will filter out the option)", choices= c("Yes"=1, "No"=2), selected = c(1,2))
@@ -260,7 +260,7 @@ inputfile<- filter(inputfile, (as.integer(input$OPATad[2]-as.Date.character(`OPA
     inputfile <- "please select an antibiotic type"
 
 #if("1" %in% input$resis==TRUE && "2" %in% input$resis==TRUE)
-ggplot(inputfile,aes(x=Antibiotic,fill=Resistant.Organism.Y.N))+geom_bar(position="fill")+labs(x="Antibiotic",y="Number of Patients")+theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
+ggplot(inputfile,aes(x=Antibiotic,fill=Resistant.Organism.Y.N))+geom_bar(position="fill")+labs(x="Antibiotic",y="Percent of Patients")+theme(axis.text.x=element_text(angle=30),plot.title=element_text(hjust=0.5))
 })
 
 ```
