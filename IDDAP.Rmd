@@ -4,10 +4,11 @@ author: "Infectious Diseases Data Analysis Program"
 output: 
   flexdashboard::flex_dashboard:
     source: embed
-    runtime: shiny_prerendered
     orientation: rows
     vertical_layout: fill
     theme: cerulean
+runtime: shiny
+
 ---
 
 ```{r}
